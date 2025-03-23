@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Prishu Image Compressor</title>
+		<style>
+			/* General Styles */
+			body {
+				font-family: 'Poppins', sans-serif;
+				background-color: #e0e5ec;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+			}
+
+			.container {
+				background-color: #e0e5ec;
+				padding: 30px;
+				border-radius: 20px;
+				box-shadow: 10px 10px 20px #a3b1c6, -10px -10px 20px #ffffff;
+				max-width: 800px;
+				width: 100%;
+				margin: 20px;
+			}
+
+			h1 {
+				color: #333;
+				text-align: center;
+				margin-bottom: 10px;
+				font-size: 2rem;
+				font-weight: 600;
+			}
+
+			p {
+				color: #666;
+				text-align: center;
+				font-size: 1rem;
+			}
+
+			/* Upload Section */
+			.upload-section {
+				display: flex;
+				flex-direction: column;
+				gap: 15px;
+				margin-bottom: 20px;
+				padding: 20px;
+				border-radius: 15px;
+				background-color: #e0e5ec;
+			}
+
+			input[type="file"] {
+				padding: 15px;
+				background-color: #e0e5ec;
+				border: none;
+				border-radius: 15px;
+				box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+				text-align: center;
+				font-size: 1rem;
+				color: #333;
+			}
+
+			input[type="range"] {
+				width: 100%;
+				background-color: #e0e5ec;
+				border-radius: 15px;
+				box-shadow: inset 5px 5px 10px #a3b1c6, inset -5px -5px 10px #ffffff;
+				-webkit-appearance: none;
+				appearance: none;
+				height: 10px;
+			}
+
+			input[type="range"]::-webkit-slider-thumb {
+				-webkit-appearance: none;
+				appearance: none;
+				width: 20px;
+				height: 20px;
+				background-color: #007bff;
+				border-radius: 50%;
+				box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+				cursor: pointer;
+			}
+
+			button {
+				padding: 15px;
+				background-color: #007bff;
+				color: white;
+				border: none;
+				border-radius: 15px;
+				box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+				cursor: pointer;
+				font-size: 1rem;
+				font-weight: 600;
+				transition: all 0.3s ease;
+			}
+
+			button:hover {
+				background-color: #0056b3;
+				box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+			}
+
+			/* Progress Bar */
+			#progressBarContainer {
+				margin-top: 20px;
+				padding: 10px;
+				border-radius: 15px;
+				background-color: #e0e5ec;
+				width: 100%;
+				display: none;
+			}
+
+			#progressBar {
+				width: 0%;
+				height: 20px;
+				background-color: #007bff;
+				border-radius: 10px;
+				transition: width 0.3s ease;
+			}
+
+			#progressText {
+				display: block;
+				text-align: center;
+				margin-top: 5px;
+				font-size: 0.9rem;
+				color: #333;
+			}
+
+			/* Results Section */
+			.results {
+				margin-top: 20px;
+				padding: 20px;
+				border-radius: 15px;
+				background-color: #e0e5ec;
+			}
+
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 10px;
+				background-color: #e0e5ec;
+				border-radius: 15px;
+				box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+			}
+
+			th,
+			td {
+				padding: 15px;
+				text-align: left;
+				border-bottom: 1px solid #d1d9e6;
+			}
+
+			th {
+				background-color: #e0e5ec;
+				font-weight: 600;
+				color: #333;
+			}
+
+			tr:hover {
+				background-color: #d1d9e6;
+			}
+
+			.downloadBtn {
+				padding: 8px 15px;
+				background-color: #28a745;
+				color: white;
+				border: none;
+				border-radius: 10px;
+				box-shadow: 3px 3px 6px #a3b1c6, -3px -3px 6px #ffffff;
+				cursor: pointer;
+				font-size: 0.9rem;
+				font-weight: 600;
+				transition: all 0.3s ease;
+			}
+
+			.downloadBtn:hover {
+				background-color: #218838;
+				box-shadow: 2px 2px 4px #a3b1c6, -2px -2px 4px #ffffff;
+			}
+
+			/* Section Styles */
+			.section {
+				margin-bottom: 30px;
+				padding: 20px;
+				border-radius: 15px;
+				background-color: #e0e5ec;
+			}
+
+			.neomorphism {
+				box-shadow: 5px 5px 10px #a3b1c6, -5px -5px 10px #ffffff;
+			}
+
+			.topic {
+				color: red;
+				font-size: 1.5rem;
+				font-weight: 600;
+				margin-bottom: 15px;
+			}
+
+			.subtopic {
+				color: green;
+				font-size: 1.2rem;
+				font-weight: 500;
+				margin-top: 10px;
+			}
+
+			.description {
+				color: blue;
+				font-size: 1rem;
+				margin-bottom: 10px;
+			}
+
+			/* FAQ Styles */
+			.faq {
+				margin-bottom: 15px;
+			}
+
+			.question {
+				color: green;
+				font-size: 1.1rem;
+				font-weight: 500;
+				margin-bottom: 5px;
+			}
+
+			.answer {
+				color: blue;
+				font-size: 1rem;
+			}
+
+			/* Responsive Design */
+			@media (max-width: 600px) {
+				h1 {
+					font-size: 1.5rem;
+				}
+
+				.topic {
+					font-size: 1.3rem;
+				}
+
+				.subtopic {
+					font-size: 1.1rem;
+				}
+
+				.description {
+					font-size: 0.9rem;
+				}
+
+				.question {
+					font-size: 1rem;
+				}
+
+				.answer {
+					font-size: 0.9rem;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<!-- Tool Section -->
+			<h1>📷 Prishu Image Compressor</h1>
+			<p>Reduce image sizes without compromising quality! 🖼️</p>
+
+			<div class="upload-section neomorphism">
+				<input type="file" id="fileInput" accept="image/*">
+				<label for="compressLevel">Compression Level:</label>
+				<input type="range" id="compressLevel" min="0" max="1" step="0.1" value="0.5">
+				<span id="compressValue">0.5</span>
+				<button id="compressBtn">Compress Image 🚀</button>
+			</div>
+
+			<!-- Progress Bar -->
+			<div id="progressBarContainer" class="neomorphism" style="display: none;">
+				<div id="progressBar"></div>
+				<span id="progressText">0%</span>
+			</div>
+
+			<!-- Results Section -->
+			<div class="results neomorphism">
+				<h2>Results 📊</h2>
+				<table id="resultsTable">
+					<thead>
+						<tr>
+							<th>Original Size</th>
+							<th>Compressed Size</th>
+							<th>Compression Ratio</th>
+							<th>Status</th>
+							<th>Download</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- Results will be dynamically added here -->
+					</tbody>
+				</table>
+			</div>
+
+			<!-- Ad Content Sections -->
+			<!-- Why We Chose It -->
+			<div class="section neomorphism">
+				<h2 class="topic">Why We Chose It</h2>
+				<div class="subtopic">Efficiency</div>
+				<p class="description">Our tool is designed to compress images quickly and efficiently, saving you time and storage space.</p>
+				<div class="subtopic">Quality Preservation</div>
+				<p class="description">Despite reducing file size, our tool ensures that image quality remains intact.</p>
+				<div class="subtopic">User-Friendly</div>
+				<p class="description">With a simple and intuitive interface, anyone can use this tool without any technical knowledge.</p>
+			</div>
+
+			<!-- How It Works -->
+			<div class="section neomorphism">
+				<h2 class="topic">How It Works</h2>
+				<div class="subtopic">Upload Image</div>
+				<p class="description">Simply upload your image using the file input. The tool supports all common image formats.</p>
+				<div class="subtopic">Adjust Compression</div>
+				<p class="description">Use the slider to set your desired compression level. Higher compression means smaller file size but slightly lower quality.</p>
+				<div class="subtopic">Download Compressed Image</div>
+				<p class="description">Once compressed, download the image with a single click. The results are displayed in a detailed table.</p>
+			</div>
+
+			<!-- How to Use -->
+			<div class="section neomorphism">
+				<h2 class="topic">How to Use</h2>
+				<div class="subtopic">Step 1: Upload</div>
+				<p class="description">Click the "Choose File" button and select the image you want to compress.</p>
+				<div class="subtopic">Step 2: Adjust</div>
+				<p class="description">Use the compression slider to set your preferred level of compression.</p>
+				<div class="subtopic">Step 3: Compress & Download</div>
+				<p class="description">Click the "Compress Image" button, and once done, download the compressed image.</p>
+			</div>
+
+			<!-- Benefits -->
+			<div class="section neomorphism">
+				<h2 class="topic">Benefits</h2>
+				<div class="subtopic">Save Storage Space</div>
+				<p class="description">Compressed images take up less space on your device or server.</p>
+				<div class="subtopic">Faster Load Times</div>
+				<p class="description">Smaller images load faster on websites and apps, improving user experience.</p>
+				<div class="subtopic">Cost-Effective</div>
+				<p class="description">Reduce bandwidth costs by using smaller image files.</p>
+			</div>
+
+			<!-- FAQs -->
+			<div class="section neomorphism">
+				<h2 class="topic">FAQs</h2>
+				<div class="faq">
+					<div class="question">What image formats are supported?</div>
+					<div class="answer">We support all common formats like JPEG, PNG, GIF, and more.</div>
+				</div>
+				<div class="faq">
+					<div class="question">Is there a limit to the file size?</div>
+					<div class="answer">No, but larger files may take longer to compress.</div>
+				</div>
+				<div class="faq">
+					<div class="question">Can I adjust the compression level?</div>
+					<div class="answer">Yes, use the slider to set your desired compression level.</div>
+				</div>
+				<div class="faq">
+					<div class="question">Is the tool free to use?</div>
+					<div class="answer">Absolutely! Our Image Compressor is completely free.</div>
+				</div>
+				<div class="faq">
+					<div class="question">Will my images lose quality?</div>
+					<div class="answer">Some quality loss may occur at higher compression levels, but it's usually minimal.</div>
+				</div>
+				<div class="faq">
+					<div class="question">Can I compress multiple images at once?</div>
+					<div class="answer">Currently, the tool supports compressing one image at a time.</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			const fileInput = document.getElementById('fileInput');
+			const compressLevel = document.getElementById('compressLevel');
+			const compressValue = document.getElementById('compressValue');
+			const compressBtn = document.getElementById('compressBtn');
+			const progressBarContainer = document.getElementById('progressBarContainer');
+			const progressBar = document.getElementById('progressBar');
+			const progressText = document.getElementById('progressText');
+			const resultsTable = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
+
+			// Update compression level value display
+			compressLevel.addEventListener('input', () => {
+				compressValue.textContent = compressLevel.value;
+			});
+
+			// Compress image function
+			compressBtn.addEventListener('click', () => {
+				const file = fileInput.files[0];
+				if (!file) {
+					alert('Please upload an image first!');
+					return;
+				}
+
+				// Show progress bar
+				progressBarContainer.style.display = 'block';
+				progressBar.style.width = '0%';
+				progressText.textContent = '0%';
+
+				const reader = new FileReader();
+				reader.onload = (event) => {
+					const img = new Image();
+					img.src = event.target.result;
+
+					img.onload = () => {
+						const canvas = document.createElement('canvas');
+						const ctx = canvas.getContext('2d');
+
+						// Set canvas dimensions
+						canvas.width = img.width;
+						canvas.height = img.height;
+
+						// Draw image on canvas
+						ctx.drawImage(img, 0, 0);
+
+						// Compress image
+						const quality = parseFloat(compressLevel.value);
+						let progress = 0;
+						const interval = setInterval(() => {
+							progress += 10;
+							progressBar.style.width = `${progress}%`;
+							progressText.textContent = `${progress}%`;
+							if (progress >= 100) {
+								clearInterval(interval);
+							}
+						}, 100);
+
+						canvas.toBlob(
+							(blob) => {
+								clearInterval(interval);
+								progressBar.style.width = '100%';
+								progressText.textContent = '100%';
+
+								setTimeout(() => {
+									progressBarContainer.style.display = 'none';
+								}, 500);
+
+								const compressedFile = new File([blob], file.name, {
+									type: 'image/jpeg'
+								});
+
+								// Calculate sizes
+								const originalSize = (file.size / 1024).toFixed(2); // in KB
+								const compressedSize = (compressedFile.size / 1024).toFixed(2); // in KB
+								const compressionRatio = ((1 - compressedFile.size / file.size) * 100).toFixed(2);
+
+								// Add result to table
+								const newRow = resultsTable.insertRow();
+								newRow.innerHTML = `
+            <td>${originalSize} KB</td>
+            <td>${compressedSize} KB</td>
+            <td>${compressionRatio}%</td>
+            <td>✅ Compressed</td>
+            <td><button class="downloadBtn" data-url="${URL.createObjectURL(compressedFile)}" data-filename="${file.name}">Download ⬇️</button></td>
+          `;
+
+								// Add download functionality
+								const downloadBtn = newRow.querySelector('.downloadBtn');
+								downloadBtn.addEventListener('click', () => {
+									const url = downloadBtn.getAttribute('data-url');
+									const filename = downloadBtn.getAttribute('data-filename');
+									const link = document.createElement('a');
+									link.href = url;
+									link.download = filename;
+									link.click();
+									URL.revokeObjectURL(url); // Clean up
+								});
+							},
+							'image/jpeg',
+							quality
+						);
+					};
+				};
+				reader.readAsDataURL(file);
+			});
+		</script>
+	</body>
+
+</html>
